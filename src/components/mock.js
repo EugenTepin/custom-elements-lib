@@ -8,7 +8,7 @@ function Mock(props){
 class MockElement extends HTMLElement {
   constructor() {
     super();
-  this.name = '';
+  this._name = '';
   }
 
   set name(value) {
