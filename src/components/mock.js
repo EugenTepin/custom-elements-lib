@@ -13,6 +13,7 @@ class MockElement extends HTMLElement {
 
   set name(value) {
     this._name = value;
+    this.render(<Mock name={this.name}/>);
   }
   get name() {
     return this._name;
@@ -23,7 +24,7 @@ class MockElement extends HTMLElement {
     }
 
     connectedCallback() {
-        this.render(<Mock/>);
+        this.render(<Mock name={this.name} />);
     }
  }
 
