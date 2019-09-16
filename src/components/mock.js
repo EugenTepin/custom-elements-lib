@@ -6,10 +6,6 @@ function Mock(props){
 }
 
 class MockElement extends HTMLElement {
-  constructor() {
-    super();
-  this._name = '';
-  }
 
   set name(value) {
     this._name = value;
@@ -24,6 +20,7 @@ class MockElement extends HTMLElement {
     }
 
     connectedCallback() {
+        this._name = '';
         this.render(<Mock name={this.name} />);
     }
  }
