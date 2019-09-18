@@ -12,10 +12,6 @@ class TodoFooter extends React.Component {
         if(count === 0){
             return null;
         }
-        //const alienHandler = (this.props.handler)? this.props.handler : () => {};
-//onClick={(e) => { this.setState({clicks: this.state.clicks +1 }) } }
-//title={ this.state.clicks}
-
 
         const clearBtn = (this.props.hasCompleted)? <button className="clear-completed" onClick= {() => {this.props.removeCompleted();}}>Clear Completed</button>:'';
         return (
@@ -48,6 +44,14 @@ class ReactTodoFooter extends HTMLElement {
     return this._status;
   }
 
+  set router(value) {
+    this._router = value;
+    this.render();
+  }
+  // get status() {
+  //   return this._status;
+  // }
+
   set count(value) {
     this._count = value;
     this.render();
@@ -65,6 +69,8 @@ class ReactTodoFooter extends HTMLElement {
   }
 
   set removeCompleted(value) {
+    console.log('removeCompleted:');
+    console.log(value);
     this._removeCompleted = value;
     this.render();
   }
@@ -80,10 +86,13 @@ class ReactTodoFooter extends HTMLElement {
     }
 
     connectedCallback() {
-      this.addEventListener('nav-link-click', (e) => {console.log(e)});  
-      // const event = new CustomEvent('nav-link-click', { detail: {msg: "bingo!"}, bubbles: true });
-      // this.dispatchEvent(event); 
-        
+      this.addEventListener('nav-link-click', (e) => {
+        console.log(e);
+        const {to} = e.detail;
+        this._router.navigate([to]);
+        e.stopPropagation();
+      });  
+       
         this.render();
     }
  }
