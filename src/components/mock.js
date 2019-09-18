@@ -9,19 +9,20 @@ class MockElement extends HTMLElement {
 
   set name(value) {
     this._name = value;
-    this.render(<Mock name={this.name}/>);
+    console.log(value);
+    this.render();
   }
   get name() {
     return this._name;
   }
 
-    render(jsx){
-        ReactDOM.render(jsx,this);
+    render(){
+        ReactDOM.render(<Mock name={this.name.toString()}/>,this);
     }
 
     connectedCallback() {
-        this._name = '';
-        this.render(<Mock name={this.name} />);
+        this._name = 'test';
+        this.render();
     }
  }
 
