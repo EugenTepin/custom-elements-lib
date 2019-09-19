@@ -7,13 +7,16 @@ class TodoFooter extends React.Component {
   //   super(props);
   //   // this.state = {clicks: 0};
   // }
+  removeCompleted = () => {
+    this.props.removeCompleted();
+  }
     render() {
         const count = this.props.count;
         if(count === 0){
             return null;
         }
 
-        const clearBtn = (this.props.hasCompleted)? <button className="clear-completed" onClick= {() => {this.props.removeCompleted();}}>Clear Completed</button>:'';
+        const clearBtn = (this.props.hasCompleted)? <button className="clear-completed" onClick= {(e) => {this.removeCompleted();}}>Clear Completed</button>:'';
         return (
         <footer className="footer" >
         <span className="todo-count"><strong>{count}</strong> {count === 1 ? 'item' : 'items'} left</span>
