@@ -11,7 +11,7 @@ class TodoFooter extends React.Component {
     this.props.removeCompleted();
   };
   render() {
-    const count = this.props.count;
+    const { count } = this.props;
     if (count === 0) {
       return null;
     }
