@@ -71,20 +71,14 @@ class ReactTodoFooter extends HTMLElement {
     return this._hasCompleted;
   }
 
-  set removeCompleted(value) {
-    console.log('removeCompleted:');
-    console.log(value);
-    this._removeCompleted = value;
-    this.render();
-  }
-  get removeCompleted() {
-    return this._removeCompleted;
+  removeCompleted() {
+    var event = new CustomEvent("clear-completed");
+    this.dispatchEvent(event);
   }
 
     render(){
-
         ReactDOM.render(
-            <TodoFooter  count={this._count}  hasCompleted={this._hasCompleted} removeCompleted={this._removeCompleted}/>,
+            <TodoFooter  count={this._count}  hasCompleted={this._hasCompleted} removeCompleted={this.removeCompleted.bind(this)}/>,
             this);
     }
 
