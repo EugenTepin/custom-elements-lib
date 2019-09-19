@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 class TodoFooter extends React.Component {
   // constructor(props) {
@@ -9,36 +9,72 @@ class TodoFooter extends React.Component {
   // }
   removeCompleted = () => {
     this.props.removeCompleted();
-  }
-    render() {
-        const count = this.props.count;
-        if(count === 0){
-            return null;
-        }
+  };
+  render() {
+    const count = this.props.count;
+    if (count === 0) {
+      return null;
+    }
 
-        const clearBtn = (this.props.hasCompleted)? <button className="clear-completed" onClick= {(e) => {this.removeCompleted();}}>Clear Completed</button>:'';
-        return (
-        <footer className="footer" >
-        <span className="todo-count"><strong>{count}</strong> {count === 1 ? 'item' : 'items'} left</span>
+    const clearBtn = this.props.hasCompleted ? (
+      <button
+        className="clear-completed"
+        onClick={(e) => {
+          this.removeCompleted();
+        }}
+      >
+        Clear Completed
+      </button>
+    ) : (
+      ''
+    );
+    return (
+      <footer className="footer">
+        <span className="todo-count">
+          <strong>{count}</strong> {count === 1 ? 'item' : 'items'} left
+        </span>
         <ul className="filters">
-            <li>
-                <NavLink to="/" activeClassName="selected" onClick={(e) => {console.log("/");}} >All</NavLink>
-            </li>
-            <li>
-                <NavLink to="/active" activeClassName="selected"  onClick={(e) => {console.log("/active");}}>Active</NavLink>
-            </li>
-            <li>
-                <NavLink to="/completed" activeClassName="selected"  onClick={(e) => {console.log("/completed")}} >Completed</NavLink>
-            </li>
+          <li>
+            <NavLink
+              to="/"
+              activeClassName="selected"
+              onClick={(e) => {
+                console.log('/');
+              }}
+            >
+              All
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/active"
+              activeClassName="selected"
+              onClick={(e) => {
+                console.log('/active');
+              }}
+            >
+              Active
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/completed"
+              activeClassName="selected"
+              onClick={(e) => {
+                console.log('/completed');
+              }}
+            >
+              Completed
+            </NavLink>
+          </li>
         </ul>
         {clearBtn}
-        </footer>
-        );
-    }
+      </footer>
+    );
+  }
 }
- 
-class ReactTodoFooter extends HTMLElement {
 
+class ReactTodoFooter extends HTMLElement {
   set status(value) {
     this._status = value;
     this.render();
@@ -72,27 +108,31 @@ class ReactTodoFooter extends HTMLElement {
   }
 
   removeCompleted() {
-    var event = new CustomEvent("clear-completed");
+    var event = new CustomEvent('clear-completed');
     this.dispatchEvent(event);
   }
 
-    render(){
-        ReactDOM.render(
-            <TodoFooter  count={this._count}  hasCompleted={this._hasCompleted} removeCompleted={this.removeCompleted.bind(this)}/>,
-            this);
-    }
+  render() {
+    ReactDOM.render(
+      <TodoFooter
+        count={this._count}
+        hasCompleted={this._hasCompleted}
+        removeCompleted={this.removeCompleted.bind(this)}
+      />,
+      this
+    );
+  }
 
-    connectedCallback() {
-      this.addEventListener('nav-link-click', (e) => {
-        console.log(e);
-        const {to} = e.detail;
-        this._router.navigate([to]);
-        e.stopPropagation();
-      });  
-       
-        this.render();
-    }
- }
+  connectedCallback() {
+    this.addEventListener('nav-link-click', (e) => {
+      console.log(e);
+      const { to } = e.detail;
+      this._router.navigate([to]);
+      e.stopPropagation();
+    });
 
+    this.render();
+  }
+}
 
 export default ReactTodoFooter;

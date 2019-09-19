@@ -1,12 +1,11 @@
-import React from "react";
+import React from 'react';
 import ReactDOM from 'react-dom';
 
-function Mock(props){
-    return <span>Hello, {props.name}</span>;
+function Mock(props) {
+  return <span>Hello, {props.name}</span>;
 }
 
 class MockElement extends HTMLElement {
-
   set name(value) {
     this._name = value;
     console.log(value);
@@ -16,15 +15,14 @@ class MockElement extends HTMLElement {
     return this._name;
   }
 
-    render(){
-        ReactDOM.render(<Mock name={this.name.toString()}/>,this);
-    }
+  render() {
+    ReactDOM.render(<Mock name={this.name.toString()} />, this);
+  }
 
-    connectedCallback() {
-        this._name = 'test';
-        this.render();
-    }
- }
-
+  connectedCallback() {
+    this._name = 'test';
+    this.render();
+  }
+}
 
 export default MockElement;
