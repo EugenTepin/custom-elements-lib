@@ -10,7 +10,7 @@ class TodoItem extends React.Component {
       todoStopEdit,
       todoSubmit,
       todoCancelEdit,
-      setTodoValue,
+      todoOnKeyUp,
       todoTitle,
       todoCompleted,
       editing
@@ -20,7 +20,19 @@ class TodoItem extends React.Component {
     const editInput = '';
     if (editing) {
       itemClass += ' editing';
-      editInput = <input type="text" className="edit" value={todoTitle} />;
+      editInput = (
+        <input
+          type="text"
+          className="edit"
+          onKeyUp={(e) => {
+            todoOnKeyUp(e);
+          }}
+          onBlur={(e) => {
+            todoStopEdit();
+          }}
+          value={todoTitle}
+        />
+      );
     }
 
     return (
@@ -34,7 +46,14 @@ class TodoItem extends React.Component {
               todoToggle();
             }}
           />
-          <label>{todoTitle}</label>
+          <label
+            onDoubleClick={(e) => {
+              console.log('edit');
+              todoEdit();
+            }}
+          >
+            {todoTitle}
+          </label>
           <button
             className="destroy"
             onClick={(e) => {
@@ -65,8 +84,24 @@ class ReactTodoItem extends HTMLElement {
   }
 
   todoStopEdit() {
-    var event = new CustomEvent('todo-stop-edit');
-    this.dispatchEvent(event);
+    console.log(this.value);
+    const inputVal = this.value;
+
+    (function(inputVal) {
+      var event = new CustomEvent('set-todo-value', {
+        detail: inputVal,
+        bubbles: true
+      });
+      this.dispatchEvent(event);
+    }.bind(this)(inputVal));
+
+    (function() {
+      this.dispatchEvent(new CustomEvent('todo-stop-edit'));
+    }.bind(this)());
+  }
+
+  todoOnKeyUp(e) {
+    console.log(e.key);
   }
 
   todoSubmit() {
@@ -79,16 +114,18 @@ class ReactTodoItem extends HTMLElement {
     this.dispatchEvent(event);
   }
 
-  setTodoValue() {
-    const inputVal = this.value;
-    (function(inputVal) {
-      var event = new CustomEvent('set-todo-value', {
-        detail: inputVal,
-        bubbles: true
-      });
-      this.dispatchEvent(event);
-    }.bind(this)(inputVal));
-  }
+  // setTodoValue() {
+  //   const inputVal = this.value;
+  //   (function(inputVal) {
+  //     var event = new CustomEvent('set-todo-value', {
+  //       detail: inputVal,
+  //       bubbles: true
+  //     });
+  //     this.dispatchEvent(event);
+  //   }.bind(this)(inputVal));
+
+  //   ().bind(this)();
+  // }
 
   set todoTitle(value) {
     this._todoTitle = value;
@@ -118,7 +155,7 @@ class ReactTodoItem extends HTMLElement {
         todoStopEdit={this.todoStopEdit.bind(this)}
         todoSubmit={this.todoSubmit.bind(this)}
         todoCancelEdit={this.todoCancelEdit.bind(this)}
-        setTodoValue={this.setTodoValue}
+        todoOnKeyUp={this.todoOnKeyUp.bind(this)}
         todoTitle={this._todoTitle}
         todoCompleted={this._todoCompleted}
         editing={this._editing}
