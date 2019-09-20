@@ -26,9 +26,21 @@ class TodoItem extends React.Component {
     return (
       <li className={itemClass}>
         <div className="view">
-          <input type="checkbox" className="toggle" checked={todoCompleted} />
+          <input
+            type="checkbox"
+            className="toggle"
+            checked={todoCompleted}
+            onClick={(e) => {
+              todoToggle();
+            }}
+          />
           <label>{todoTitle}</label>
-          <button className="destroy"></button>
+          <button
+            className="destroy"
+            onClick={(e) => {
+              todoRemove();
+            }}
+          ></button>
         </div>
         {editInput}
       </li>
