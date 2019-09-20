@@ -16,7 +16,7 @@ class TodoItem extends React.Component {
       editing
     } = this.props;
 
-    const itemClass = todoCompleted ? 'completed' : '';
+    let itemClass = todoCompleted ? 'completed' : '';
     const editInput = '';
     if (editing) {
       itemClass += ' editing';
