@@ -92,16 +92,27 @@ class ReactTodoItem extends HTMLElement {
     //this._value = value; // test
     this.render();
   }
+  get todoTitle() {
+    return this._todoTitle;
+  }
 
   set todoCompleted(value) {
     this._todoCompleted = value;
     this.render();
   }
 
+  get todoCompleted() {
+    return this._todoCompleted;
+  }
+
   set editing(value) {
     console.log('editing is set to: ' + value);
     this._editing = value;
     this.render(); // maybe this should be removed
+  }
+
+  get editing() {
+    return this._editing;
   }
 
   get value() {
