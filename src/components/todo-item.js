@@ -14,6 +14,8 @@ import ReactDOM from 'react-dom';
 class TodoItem extends React.Component {
   constructor(props) {
     super(props);
+    console.log('TodoItem props');
+    console.log(this.props);
     this.state = {
       value: this.props.todoTitle,
       satus: this.props.todoCompleted,
@@ -31,6 +33,8 @@ class TodoItem extends React.Component {
   };
 
   render() {
+    console.log('TodoItem state');
+    console.log(this.state);
     let itemClass = this.state.status ? 'completed' : '';
     let editInput = '';
     if (this.state.editing) {
