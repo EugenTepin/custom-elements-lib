@@ -1,22 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class TodoItem extends React.Component {
-  render() {
-    const {
-      todoToggle,
-      todoRemove,
-      todoEdit,
-      todoStopEdit,
-      todoSubmit,
-      todoCancelEdit,
-      todoOnKeyUp,
-      todoTitle,
-      todoCompleted,
-      editing
-    } = this.props;
+/**
+ * Props
+ * todoTitle
+ * todoCompleted
+ * editing
+ * todoEdit
+ * todoToggle
+ * todoRemove
+ */
 
-    let itemClass = todoCompleted ? 'completed' : '';
+class TodoItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: this.props.todoTitle,
+      satus: this.props.todoCompleted,
+      editing: this.props.editing
+    };
+  }
+  todoEdit = (event) => {
+    this.setState({ ...this.state, value: event.target.value });
+    this.props.todoEdit();
+  };
+
+  todoToggle = () => {
+    this.setState({ ...this.state, status: !this.state.status });
+    this.props.todoToggle();
+  };
+
+  render() {
+    const { value, status, editing } = this.state;
+    let itemClass = status ? 'completed' : '';
     let editInput = '';
     if (editing) {
       itemClass += ' editing';
@@ -24,13 +40,18 @@ class TodoItem extends React.Component {
         <input
           type="text"
           className="edit"
-          onKeyUp={(e) => {
-            todoOnKeyUp(e);
+          onChange={(e) => {
+            this.todoEdit(e);
           }}
           onBlur={(e) => {
-            todoStopEdit();
+            this.setState({ ...this.state, editing: false });
           }}
-          value={todoTitle}
+          onKeyUp={(e) => {
+            if (e.key === 'Enter' || e.key === 'Escape') {
+              this.setState({ ...this.state, editing: false });
+            }
+          }}
+          value={value}
         />
       );
     }
@@ -41,23 +62,22 @@ class TodoItem extends React.Component {
           <input
             type="checkbox"
             className="toggle"
-            checked={todoCompleted}
+            checked={status}
             onClick={(e) => {
-              todoToggle();
+              this.todoToggle();
             }}
           />
           <label
             onDoubleClick={(e) => {
-              console.log('edit');
-              todoEdit();
+              this.setState({ ...this.state, editing: true });
             }}
           >
-            {todoTitle}
+            {value}
           </label>
           <button
             className="destroy"
             onClick={(e) => {
-              todoRemove();
+              this.props.todoRemove();
             }}
           ></button>
         </div>
@@ -68,67 +88,9 @@ class TodoItem extends React.Component {
 }
 
 class ReactTodoItem extends HTMLElement {
-  todoToggle() {
-    var event = new CustomEvent('todo-toggle');
-    this.dispatchEvent(event);
-  }
-
-  todoRemove() {
-    var event = new CustomEvent('todo-remove');
-    this.dispatchEvent(event);
-  }
-
-  todoEdit() {
-    var event = new CustomEvent('todo-edit');
-    this.dispatchEvent(event);
-  }
-
-  todoStopEdit() {
-    console.log(this.value);
-    const inputVal = this.value;
-
-    (function(inputVal) {
-      var event = new CustomEvent('set-todo-value', {
-        detail: inputVal,
-        bubbles: true
-      });
-      this.dispatchEvent(event);
-    }.bind(this)(inputVal));
-
-    (function() {
-      this.dispatchEvent(new CustomEvent('todo-stop-edit'));
-    }.bind(this)());
-  }
-
-  todoOnKeyUp(e) {
-    console.log(e.key);
-  }
-
-  todoSubmit() {
-    var event = new CustomEvent('todo-submit');
-    this.dispatchEvent(event);
-  }
-
-  todoCancelEdit() {
-    var event = new CustomEvent('todo-cancel-edit');
-    this.dispatchEvent(event);
-  }
-
-  // setTodoValue() {
-  //   const inputVal = this.value;
-  //   (function(inputVal) {
-  //     var event = new CustomEvent('set-todo-value', {
-  //       detail: inputVal,
-  //       bubbles: true
-  //     });
-  //     this.dispatchEvent(event);
-  //   }.bind(this)(inputVal));
-
-  //   ().bind(this)();
-  // }
-
   set todoTitle(value) {
     this._todoTitle = value;
+    this._value = value; // test
     this.render();
   }
 
@@ -138,39 +100,54 @@ class ReactTodoItem extends HTMLElement {
   }
 
   set editing(value) {
+    console.log('editing is set to: ' + value);
     this._editing = value;
-    this.render();
+    this.render(); // maybe this should be removed
   }
 
   get value() {
     return this._value;
   }
 
+  dispatchCustomEvent(name, detail) {
+    var event =
+      detail !== undefined
+        ? new CustomEvent(name, { detail })
+        : new CustomEvent(name);
+
+    return this.dispatchEvent(event);
+  }
+
+  todoToggle() {
+    this.dispatchEvent('todo-toggle');
+  }
+
+  todoRemove() {
+    this.dispatchEvent('todo-remove');
+  }
+
+  todoEdit() {
+    this._value = this._reactComponent.state.value;
+    this.dispatchEvent('todo-edit');
+  }
+
   render() {
-    ReactDOM.render(
+    this._reactComponent = ReactDOM.render(
       <TodoItem
-        todoToggle={this.todoToggle.bind(this)}
-        todoRemove={this.todoRemove.bind(this)}
-        todoEdit={this.todoEdit.bind(this)}
-        todoStopEdit={this.todoStopEdit.bind(this)}
-        todoSubmit={this.todoSubmit.bind(this)}
-        todoCancelEdit={this.todoCancelEdit.bind(this)}
-        todoOnKeyUp={this.todoOnKeyUp.bind(this)}
         todoTitle={this._todoTitle}
         todoCompleted={this._todoCompleted}
         editing={this._editing}
+        todoEdit={this.todoEdit.bind(this)}
+        todoToggle={this.todoToggle.bind(this)}
+        todoRemove={this.todoRemove.bind(this)}
       />,
       this
     );
+    console.log(this._reactComponent);
   }
 
   connectedCallback() {
-    this.addEventListener('set-todo-value', (e) => {
-      console.log(e);
-      this._value = e.detail.value;
-      e.stopPropagation();
-    });
-
+    console.log('Element is connected.');
     this.render();
   }
 }
