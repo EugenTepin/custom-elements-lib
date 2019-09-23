@@ -31,10 +31,9 @@ class TodoItem extends React.Component {
   };
 
   render() {
-    const { value, status, editing } = this.state;
-    let itemClass = status ? 'completed' : '';
+    let itemClass = this.state.status ? 'completed' : '';
     let editInput = '';
-    if (editing) {
+    if (this.state.editing) {
       itemClass += ' editing';
       editInput = (
         <input
@@ -51,7 +50,7 @@ class TodoItem extends React.Component {
               this.setState({ ...this.state, editing: false });
             }
           }}
-          value={value}
+          value={this.state.value}
         />
       );
     }
@@ -62,7 +61,7 @@ class TodoItem extends React.Component {
           <input
             type="checkbox"
             className="toggle"
-            checked={status}
+            checked={this.state.status}
             onClick={(e) => {
               this.todoToggle();
             }}
@@ -72,7 +71,7 @@ class TodoItem extends React.Component {
               this.setState({ ...this.state, editing: true });
             }}
           >
-            {value}
+            {this.state.value}
           </label>
           <button
             className="destroy"
@@ -119,16 +118,16 @@ class ReactTodoItem extends HTMLElement {
   }
 
   todoToggle() {
-    this.dispatchEvent('todo-toggle');
+    this.dispatchCustomEvent('todo-toggle');
   }
 
   todoRemove() {
-    this.dispatchEvent('todo-remove');
+    this.dispatchCustomEvent('todo-remove');
   }
 
   todoEdit() {
     this._value = this._reactComponent.state.value;
-    this.dispatchEvent('todo-edit');
+    this.dispatchCustomEvent('todo-edit');
   }
 
   render() {
