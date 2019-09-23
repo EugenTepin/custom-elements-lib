@@ -157,7 +157,8 @@ class ReactTodoItem extends HTMLElement {
       />,
       this
     );
-    console.log(JSON.stringify(this._reactComponent));
+    console.log(JSON.stringify(this._reactComponent.props));
+    console.log(JSON.stringify(this._reactComponent.state));
   }
 
   connectedCallback() {
