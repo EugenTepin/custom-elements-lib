@@ -162,6 +162,7 @@ class ReactTodoItem extends HTMLElement {
 
   connectedCallback() {
     console.log('Element is connected.');
+    console.log(this);
     this.render();
   }
 }
