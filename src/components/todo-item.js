@@ -23,12 +23,12 @@ class TodoItem extends React.Component {
     };
   }
   todoEdit = (event) => {
-    this.setState({ ...this.state, value: event.target.value });
+    this.setState({ value: event.target.value });
     this.props.todoEdit();
   };
 
   todoToggle = () => {
-    this.setState({ ...this.state, status: !this.state.status });
+    this.setState({ status: !this.state.status });
     this.props.todoToggle();
   };
 
@@ -47,11 +47,11 @@ class TodoItem extends React.Component {
             this.todoEdit(e);
           }}
           onBlur={(e) => {
-            this.setState({ ...this.state, editing: false });
+            this.setState({ editing: false });
           }}
           onKeyUp={(e) => {
             if (e.key === 'Enter' || e.key === 'Escape') {
-              this.setState({ ...this.state, editing: false });
+              this.setState({ editing: false });
             }
           }}
           value={this.state.value}
@@ -72,7 +72,7 @@ class TodoItem extends React.Component {
           />
           <label
             onDoubleClick={(e) => {
-              this.setState({ ...this.state, editing: true });
+              this.setState({ editing: true });
             }}
           >
             {this.state.value}
@@ -157,12 +157,12 @@ class ReactTodoItem extends HTMLElement {
       />,
       this
     );
-    console.log(this._reactComponent);
+    console.log(JSON.stringify(this._reactComponent));
   }
 
   connectedCallback() {
     console.log('Element is connected.');
-    console.log(this);
+    console.log(this._todoTitle);
     this.render();
   }
 }
