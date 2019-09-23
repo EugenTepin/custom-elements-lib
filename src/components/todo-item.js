@@ -89,7 +89,7 @@ class TodoItem extends React.Component {
 class ReactTodoItem extends HTMLElement {
   set todoTitle(value) {
     this._todoTitle = value;
-    this._value = value; // test
+    //this._value = value; // test
     this.render();
   }
 
