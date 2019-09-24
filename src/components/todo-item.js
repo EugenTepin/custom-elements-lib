@@ -119,9 +119,9 @@ class ReactTodoItem extends HTMLElement {
     return this._editing;
   }
 
-  get value() {
-    return this._value;
-  }
+  // get value() {
+  //   return this._value;
+  // }
 
   dispatchCustomEvent(name, detail) {
     var event =
@@ -141,7 +141,7 @@ class ReactTodoItem extends HTMLElement {
   }
 
   todoEdit() {
-    this._value = this._reactComponent.state.value;
+    this.value = this._reactComponent.state.value;
     this.dispatchCustomEvent('todo-edit');
   }
 
