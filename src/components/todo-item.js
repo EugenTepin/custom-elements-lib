@@ -14,8 +14,6 @@ import ReactDOM from 'react-dom';
 class TodoItem extends React.Component {
   constructor(props) {
     super(props);
-    console.log('TodoItem props');
-    console.log(props);
     this.state = {
       value: props.todoTitle,
       status: props.todoCompleted,
@@ -33,8 +31,6 @@ class TodoItem extends React.Component {
   };
 
   render() {
-    console.log('TodoItem state');
-    console.log(this.state);
     let itemClass = this.state.status ? 'completed' : '';
     let editInput = '';
     if (this.state.editing) {
@@ -92,9 +88,7 @@ class TodoItem extends React.Component {
 
 class ReactTodoItem extends HTMLElement {
   set todoTitle(value) {
-    console.log(value);
     this._todoTitle = value;
-    //this._value = value; // test
     this.render();
   }
   get todoTitle() {
@@ -112,16 +106,12 @@ class ReactTodoItem extends HTMLElement {
 
   set editing(value) {
     this._editing = value;
-    this.render(); // maybe this should be removed
+    //    this.render(); // maybe this should be removed
   }
 
   get editing() {
     return this._editing;
   }
-
-  // get value() {
-  //   return this._value;
-  // }
 
   dispatchCustomEvent(name, detail) {
     var event =
@@ -161,6 +151,7 @@ class ReactTodoItem extends HTMLElement {
       _editing !== undefined;
 
     if (propsReady) {
+      this._renderCount++;
       this._reactComponent = ReactDOM.render(
         <TodoItem
           todoTitle={_todoTitle}
@@ -172,18 +163,14 @@ class ReactTodoItem extends HTMLElement {
         />,
         this
       );
+      console.log('Render count: %s', this._renderCount);
+      console.log(this._reactComponent);
     }
-    console.log(this._reactComponent);
   }
 
   connectedCallback() {
     console.log('Element is connected.');
-    // this._todoTitle = 'Bingo';
-    // this._editing = false;
-    // this._todoCompleted = false;
-    // setTimeout(() => {
-    //   this.render();
-    // }, 0);
+    this._renderCount = 0;
   }
 }
 
