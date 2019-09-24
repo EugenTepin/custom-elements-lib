@@ -3,10 +3,6 @@ import ReactDOM from 'react-dom';
 import { NavLink } from 'react-router-dom';
 
 class TodoFooter extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   // this.state = {clicks: 0};
-  // }
   removeCompleted = () => {
     this.props.removeCompleted();
   };
@@ -25,9 +21,8 @@ class TodoFooter extends React.Component {
       >
         Clear Completed
       </button>
-    ) : (
-      ''
-    );
+    ) : null;
+
     return (
       <footer className="footer">
         <span className="todo-count">
@@ -87,9 +82,6 @@ class ReactTodoFooter extends HTMLElement {
     this._router = value;
     this.render();
   }
-  // get status() {
-  //   return this._status;
-  // }
 
   set count(value) {
     this._count = value;
@@ -113,14 +105,20 @@ class ReactTodoFooter extends HTMLElement {
   }
 
   render() {
-    ReactDOM.render(
-      <TodoFooter
-        count={this._count}
-        hasCompleted={this._hasCompleted}
-        removeCompleted={this.removeCompleted.bind(this)}
-      />,
-      this
-    );
+    const { _count, _hasCompleted, removeCompleted } = this;
+
+    const propsReady = _count !== undefined && _hasCompleted !== undefined;
+
+    if (propsReady) {
+      ReactDOM.render(
+        <TodoFooter
+          count={_count}
+          hasCompleted={_hasCompleted}
+          removeCompleted={removeCompleted.bind(this)}
+        />,
+        this
+      );
+    }
   }
 
   connectedCallback() {
@@ -130,8 +128,6 @@ class ReactTodoFooter extends HTMLElement {
       this._router.navigate([to]);
       e.stopPropagation();
     });
-
-    this.render();
   }
 }
 
