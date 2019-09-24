@@ -28,7 +28,7 @@ class TodoItem extends React.Component {
   };
 
   todoToggle = () => {
-    this.setState({ status: !this.state.status });
+    this.setState((state) => ({ status: !state.status }));
     this.props.todoToggle();
   };
 
@@ -146,8 +146,6 @@ class ReactTodoItem extends HTMLElement {
   }
 
   render() {
-    console.log('todoTitle: ' + this.todoTitle);
-    console.log('_todoTitle: ' + this._todoTitle);
     this._reactComponent = ReactDOM.render(
       <TodoItem
         todoTitle={this._todoTitle}
@@ -167,9 +165,9 @@ class ReactTodoItem extends HTMLElement {
     // this._todoTitle = 'Bingo';
     // this._editing = false;
     // this._todoCompleted = false;
-    setTimeout(() => {
-      this.render();
-    }, 500);
+    // setTimeout(() => {
+    //   this.render();
+    // }, 0);
   }
 }
 
