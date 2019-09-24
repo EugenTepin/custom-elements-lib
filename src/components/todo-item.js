@@ -15,11 +15,11 @@ class TodoItem extends React.Component {
   constructor(props) {
     super(props);
     console.log('TodoItem props');
-    console.log(this.props);
+    console.log(props);
     this.state = {
-      value: this.props.todoTitle,
-      status: this.props.todoCompleted,
-      editing: this.props.editing
+      value: props.todoTitle,
+      status: props.todoCompleted,
+      editing: props.editing
     };
   }
   todoEdit = (event) => {
@@ -66,7 +66,7 @@ class TodoItem extends React.Component {
             type="checkbox"
             className="toggle"
             checked={this.state.status}
-            onClick={(e) => {
+            onChange={(e) => {
               this.todoToggle();
             }}
           />
@@ -92,6 +92,7 @@ class TodoItem extends React.Component {
 
 class ReactTodoItem extends HTMLElement {
   set todoTitle(value) {
+    console.log(value);
     this._todoTitle = value;
     //this._value = value; // test
     this.render();
@@ -162,11 +163,13 @@ class ReactTodoItem extends HTMLElement {
   }
 
   connectedCallback() {
-    this._todoTitle = 'test';
-    this._editing = false;
     console.log('Element is connected.');
-    console.log(this._todoTitle);
-    this.render();
+    // this._todoTitle = 'Bingo';
+    // this._editing = false;
+    // this._todoCompleted = false;
+    setTimeout(() => {
+      this.render();
+    }, 500);
   }
 }
 
