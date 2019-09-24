@@ -106,7 +106,7 @@ class ReactTodoItem extends HTMLElement {
 
   set editing(value) {
     this._editing = value;
-    //    this.render(); // maybe this should be removed
+    this.render();
   }
 
   get editing() {
