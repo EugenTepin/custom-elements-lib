@@ -18,7 +18,7 @@ class TodoItem extends React.Component {
     console.log(this.props);
     this.state = {
       value: this.props.todoTitle,
-      satus: this.props.todoCompleted,
+      status: this.props.todoCompleted,
       editing: this.props.editing
     };
   }
@@ -110,7 +110,6 @@ class ReactTodoItem extends HTMLElement {
   }
 
   set editing(value) {
-    console.log('editing is set to: ' + value);
     this._editing = value;
     this.render(); // maybe this should be removed
   }
@@ -146,6 +145,8 @@ class ReactTodoItem extends HTMLElement {
   }
 
   render() {
+    console.log('todoTitle: ' + this.todoTitle);
+    console.log('_todoTitle: ' + this._todoTitle);
     this._reactComponent = ReactDOM.render(
       <TodoItem
         todoTitle={this._todoTitle}
@@ -157,9 +158,12 @@ class ReactTodoItem extends HTMLElement {
       />,
       this
     );
+    console.log(this._reactComponent);
   }
 
   connectedCallback() {
+    this._todoTitle = 'test';
+    this._editing = false;
     console.log('Element is connected.');
     console.log(this._todoTitle);
     this.render();
