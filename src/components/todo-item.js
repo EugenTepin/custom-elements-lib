@@ -146,17 +146,33 @@ class ReactTodoItem extends HTMLElement {
   }
 
   render() {
-    this._reactComponent = ReactDOM.render(
-      <TodoItem
-        todoTitle={this._todoTitle}
-        todoCompleted={this._todoCompleted}
-        editing={this._editing}
-        todoEdit={this.todoEdit.bind(this)}
-        todoToggle={this.todoToggle.bind(this)}
-        todoRemove={this.todoRemove.bind(this)}
-      />,
-      this
-    );
+    const {
+      _todoTitle,
+      _todoCompleted,
+      _editing,
+      todoEdit,
+      todoToggle,
+      todoRemove
+    } = this;
+
+    const propsReady =
+      _todoTitle !== undefined &&
+      _todoCompleted !== undefined &&
+      _editing !== undefined;
+
+    if (propsReady) {
+      this._reactComponent = ReactDOM.render(
+        <TodoItem
+          todoTitle={_todoTitle}
+          todoCompleted={_todoCompleted}
+          editing={_editing}
+          todoEdit={todoEdit.bind(this)}
+          todoToggle={todoToggle.bind(this)}
+          todoRemove={todoRemove.bind(this)}
+        />,
+        this
+      );
+    }
     console.log(this._reactComponent);
   }
 
