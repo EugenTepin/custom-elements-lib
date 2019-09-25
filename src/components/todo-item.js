@@ -152,6 +152,8 @@ class ReactTodoItem extends HTMLElement {
 
     if (propsReady) {
       this._renderCount++;
+      console.time('Render');
+      ReactDOM.unmountComponentAtNode(this);
       this._reactComponent = ReactDOM.render(
         <TodoItem
           todoTitle={_todoTitle}
@@ -163,6 +165,7 @@ class ReactTodoItem extends HTMLElement {
         />,
         this
       );
+      console.timeEnd('Render');
       console.log('Render count: %s', this._renderCount);
       console.log(this._reactComponent);
     }
