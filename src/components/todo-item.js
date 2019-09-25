@@ -17,7 +17,8 @@ class TodoItem extends React.Component {
     this.state = {
       value: props.todoTitle,
       status: props.todoCompleted,
-      editing: props.editing
+      editing: false
+      //editing: props.editing
     };
   }
   todoEdit = (event) => {
@@ -97,21 +98,21 @@ class ReactTodoItem extends HTMLElement {
 
   set todoCompleted(value) {
     this._todoCompleted = value;
-    this.render();
+    this.render(true);
   }
 
   get todoCompleted() {
     return this._todoCompleted;
   }
 
-  set editing(value) {
-    this._editing = value;
-    this.render();
-  }
+  // set editing(value) {
+  //   this._editing = value;
+  //   this.render();
+  // }
 
-  get editing() {
-    return this._editing;
-  }
+  // get editing() {
+  //   return this._editing;
+  // }
 
   dispatchCustomEvent(name, detail) {
     var event =
@@ -135,30 +136,34 @@ class ReactTodoItem extends HTMLElement {
     this.dispatchCustomEvent('todo-edit');
   }
 
-  render() {
+  render(forced) {
     const {
       _todoTitle,
       _todoCompleted,
-      _editing,
+      //_editing,
       todoEdit,
       todoToggle,
       todoRemove
     } = this;
 
-    const propsReady =
-      _todoTitle !== undefined &&
-      _todoCompleted !== undefined &&
-      _editing !== undefined;
+    // const propsReady =
+    //   _todoTitle !== undefined &&
+    //   _todoCompleted !== undefined &&
+    //   _editing !== undefined;
+
+    const propsReady = _todoTitle !== undefined && _todoCompleted !== undefined; //x
 
     if (propsReady) {
       this._renderCount++;
       console.time('Render');
-      ReactDOM.unmountComponentAtNode(this);
+      if (forced) {
+        ReactDOM.unmountComponentAtNode(this);
+      }
       this._reactComponent = ReactDOM.render(
         <TodoItem
           todoTitle={_todoTitle}
           todoCompleted={_todoCompleted}
-          editing={_editing}
+          //editing={_editing}
           todoEdit={todoEdit.bind(this)}
           todoToggle={todoToggle.bind(this)}
           todoRemove={todoRemove.bind(this)}
