@@ -9,6 +9,9 @@ class TodoItem extends React.Component {
     };
     this.inputRef = React.createRef();
   }
+  focusInput() {
+    this.inputRef.current.focus();
+  }
   render() {
     const {
       todoTitle,
@@ -57,7 +60,7 @@ class TodoItem extends React.Component {
           <label
             onDoubleClick={(e) => {
               this.setState({ editing: true });
-              this.inputRef.current.focus();
+              this.focusInput();
             }}
           >
             {todoTitle}
