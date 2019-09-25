@@ -10,10 +10,6 @@ class TodoItem extends React.Component {
     this.inputRef = React.createRef();
   }
 
-  focusInput() {
-    this.inputRef.current.focus();
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.editing && this.state.editing) {
       this.inputRef.current.focus();
@@ -53,7 +49,7 @@ class TodoItem extends React.Component {
         />
       );
     }
-    //              this.focusInput();
+
     return (
       <li className={itemClass}>
         <div className="view">
@@ -134,31 +130,33 @@ class ReactTodoItem extends HTMLElement {
       todoRemove
     } = this;
 
-    const propsReady = _todoTitle !== undefined && _todoCompleted !== undefined; //x
+    const propsReady = _todoTitle !== null && _todoCompleted !== null;
 
-    //if (propsReady) {
-    this._renderCount++;
-    console.time('Render');
-    // this._reactComponent for debugging only
-    this._reactComponent = ReactDOM.render(
-      <TodoItem
-        todoTitle={_todoTitle}
-        todoCompleted={_todoCompleted}
-        todoEdit={todoEdit.bind(this)}
-        todoToggle={todoToggle.bind(this)}
-        todoRemove={todoRemove.bind(this)}
-      />,
-      this
-    );
-    console.timeEnd('Render');
-    console.log('Render count: %s', this._renderCount);
-    console.log(this._reactComponent);
-    //}
+    if (propsReady) {
+      this._renderCount++;
+      // this._reactComponent for debugging only
+      this._reactComponent = ReactDOM.render(
+        <TodoItem
+          todoTitle={_todoTitle}
+          todoCompleted={_todoCompleted}
+          todoEdit={todoEdit.bind(this)}
+          todoToggle={todoToggle.bind(this)}
+          todoRemove={todoRemove.bind(this)}
+        />,
+        this
+      );
+      console.log('Render count: %s', this._renderCount);
+      console.log(this._reactComponent);
+    }
   }
 
   connectedCallback() {
     console.log('Element is connected.');
+    // this._renderCount only for debug
     this._renderCount = 0;
+
+    this._todoTitle = null;
+    this._todoCompleted = null;
     this.addEventListener('todo-update-value', (e) => {
       console.log('todo-update-value detail: %s', e.detail);
       this.value = e.detail;
