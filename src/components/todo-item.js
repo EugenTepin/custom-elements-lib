@@ -1,38 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-/**
- * Props
- * todoTitle
- * todoCompleted
- * editing
- * todoEdit
- * todoToggle
- * todoRemove
- */
-
 class TodoItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: props.todoTitle,
-      status: props.todoCompleted,
       editing: false
-      //editing: props.editing
     };
+    this.inputRef = React.createRef();
   }
-  todoEdit = (value) => {
-    this.setState({ value });
-    this.props.todoEdit(value);
-  };
-
-  todoToggle = () => {
-    this.setState((state) => ({ status: !state.status }));
-    this.props.todoToggle();
-  };
-
   render() {
-    let itemClass = this.state.status ? 'completed' : '';
+    const {
+      todoTitle,
+      todoCompleted,
+      todoEdit,
+      todoRemove,
+      todoToggle
+    } = this.props;
+
+    let itemClass = todoCompleted ? 'completed' : '';
     let editInput = '';
     if (this.state.editing) {
       itemClass += ' editing';
@@ -40,8 +26,10 @@ class TodoItem extends React.Component {
         <input
           type="text"
           className="edit"
+          value={todoTitle}
+          ref={this.inputRef}
           onChange={(e) => {
-            this.todoEdit(e.target.value);
+            todoEdit(e.target.value);
           }}
           onBlur={(e) => {
             this.setState({ editing: false });
@@ -51,7 +39,6 @@ class TodoItem extends React.Component {
               this.setState({ editing: false });
             }
           }}
-          value={this.state.value}
         />
       );
     }
@@ -62,22 +49,23 @@ class TodoItem extends React.Component {
           <input
             type="checkbox"
             className="toggle"
-            checked={this.state.status}
+            checked={todoCompleted}
             onChange={(e) => {
-              this.todoToggle();
+              todoToggle();
             }}
           />
           <label
             onDoubleClick={(e) => {
               this.setState({ editing: true });
+              this.inputRef.current.focus();
             }}
           >
-            {this.state.value}
+            {todoTitle}
           </label>
           <button
             className="destroy"
             onClick={(e) => {
-              this.props.todoRemove();
+              todoRemove();
             }}
           ></button>
         </div>
@@ -98,21 +86,12 @@ class ReactTodoItem extends HTMLElement {
 
   set todoCompleted(value) {
     this._todoCompleted = value;
-    this.render(true);
+    this.render();
   }
 
   get todoCompleted() {
     return this._todoCompleted;
   }
-
-  // set editing(value) {
-  //   this._editing = value;
-  //   this.render();
-  // }
-
-  // get editing() {
-  //   return this._editing;
-  // }
 
   dispatchCustomEvent(name, detail) {
     var event =
@@ -132,49 +111,39 @@ class ReactTodoItem extends HTMLElement {
   }
 
   todoEdit(value) {
-    //this.value = this._reactComponent.state.value;
     this.dispatchCustomEvent('todo-update-value', value);
     this.dispatchCustomEvent('todo-edit');
   }
 
-  render(forced) {
+  render() {
     const {
       _todoTitle,
       _todoCompleted,
-      //_editing,
       todoEdit,
       todoToggle,
       todoRemove
     } = this;
 
-    // const propsReady =
-    //   _todoTitle !== undefined &&
-    //   _todoCompleted !== undefined &&
-    //   _editing !== undefined;
-
     const propsReady = _todoTitle !== undefined && _todoCompleted !== undefined; //x
 
-    if (propsReady) {
-      this._renderCount++;
-      console.time('Render');
-      if (forced) {
-        ReactDOM.unmountComponentAtNode(this);
-      }
-      this._reactComponent = ReactDOM.render(
-        <TodoItem
-          todoTitle={_todoTitle}
-          todoCompleted={_todoCompleted}
-          //editing={_editing}
-          todoEdit={todoEdit.bind(this)}
-          todoToggle={todoToggle.bind(this)}
-          todoRemove={todoRemove.bind(this)}
-        />,
-        this
-      );
-      console.timeEnd('Render');
-      console.log('Render count: %s', this._renderCount);
-      console.log(this._reactComponent);
-    }
+    //if (propsReady) {
+    this._renderCount++;
+    console.time('Render');
+    // this._reactComponent for debugging only
+    this._reactComponent = ReactDOM.render(
+      <TodoItem
+        todoTitle={_todoTitle}
+        todoCompleted={_todoCompleted}
+        todoEdit={todoEdit.bind(this)}
+        todoToggle={todoToggle.bind(this)}
+        todoRemove={todoRemove.bind(this)}
+      />,
+      this
+    );
+    console.timeEnd('Render');
+    console.log('Render count: %s', this._renderCount);
+    console.log(this._reactComponent);
+    //}
   }
 
   connectedCallback() {
