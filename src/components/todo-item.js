@@ -9,9 +9,17 @@ class TodoItem extends React.Component {
     };
     this.inputRef = React.createRef();
   }
+
   focusInput() {
     this.inputRef.current.focus();
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.editing && this.state.editing) {
+      this.inputRef.current.focus();
+    }
+  }
+
   render() {
     const {
       todoTitle,
@@ -45,7 +53,7 @@ class TodoItem extends React.Component {
         />
       );
     }
-
+    //              this.focusInput();
     return (
       <li className={itemClass}>
         <div className="view">
@@ -60,7 +68,6 @@ class TodoItem extends React.Component {
           <label
             onDoubleClick={(e) => {
               this.setState({ editing: true });
-              this.focusInput();
             }}
           >
             {todoTitle}
