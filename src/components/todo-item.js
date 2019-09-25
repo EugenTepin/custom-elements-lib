@@ -21,9 +21,9 @@ class TodoItem extends React.Component {
       //editing: props.editing
     };
   }
-  todoEdit = (event) => {
-    this.setState({ value: event.target.value });
-    this.props.todoEdit();
+  todoEdit = (value) => {
+    this.setState({ value });
+    this.props.todoEdit(value);
   };
 
   todoToggle = () => {
@@ -41,7 +41,7 @@ class TodoItem extends React.Component {
           type="text"
           className="edit"
           onChange={(e) => {
-            this.todoEdit(e);
+            this.todoEdit(e.target.value);
           }}
           onBlur={(e) => {
             this.setState({ editing: false });
@@ -131,8 +131,9 @@ class ReactTodoItem extends HTMLElement {
     this.dispatchCustomEvent('todo-remove');
   }
 
-  todoEdit() {
-    this.value = this._reactComponent.state.value;
+  todoEdit(value) {
+    //this.value = this._reactComponent.state.value;
+    this.dispatchCustomEvent('todo-update-value', value);
     this.dispatchCustomEvent('todo-edit');
   }
 
@@ -179,6 +180,10 @@ class ReactTodoItem extends HTMLElement {
   connectedCallback() {
     console.log('Element is connected.');
     this._renderCount = 0;
+    this.addEventListener('todo-update-value', (e) => {
+      console.log('todo-update-value detail: %s', e.detail);
+      this.value = e.detail;
+    });
   }
 }
 
