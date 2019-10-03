@@ -15,7 +15,7 @@ class TodoFooter extends React.Component {
       return null;
     }
 
-    const clearBtn = (hasCompleted) ? (
+    const clearBtn = hasCompleted ? (
       <button
         className="clear-completed"
         onClick={(e) => {
@@ -26,15 +26,19 @@ class TodoFooter extends React.Component {
       </button>
     ) : null;
 
-    
-    const themeSelect = (<select value={theme}
-    onChange={(e) => {
-      this.changeTheme(e.target.value);
-    }}
-  >
-    <option value="light">Light</option>
-    <option value="dark">Dark</option>
-  </select>)
+    const themeSelect = (
+      <select
+        value={theme}
+        style={{ margin: '0 10px' }}
+        className="clear-completed"
+        onChange={(e) => {
+          this.changeTheme(e.target.value);
+        }}
+      >
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    );
 
     return (
       <footer className="footer">
