@@ -6,7 +6,7 @@ import RemoveElement from 'alien_components/remove';
 import ReactTodoItemU from 'alien_components/todo-item-u';
 // import store  from 'store';
 // import { changeTheme } from 'actions';
-console.log('0.4.24');
+console.log('0.5.0');
 
 
 customElements.define('mock-element', MockElement);
