@@ -1,18 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { NavLink } from 'react-router-dom';
 
 class TodoFooter extends React.Component {
   removeCompleted = () => {
     this.props.removeCompleted();
   };
+  changeTheme = (val) => {
+    this.props.changeTheme(val);
+  };
+
   render() {
-    const { count } = this.props;
+    const { count, theme, hasCompleted } = this.props;
     if (count === 0) {
       return null;
     }
 
-    const clearBtn = this.props.hasCompleted ? (
+    const clearBtn = (hasCompleted) ? (
       <button
         className="clear-completed"
         onClick={(e) => {
@@ -22,6 +25,16 @@ class TodoFooter extends React.Component {
         Clear Completed
       </button>
     ) : null;
+
+    
+    const themeSelect = (<select value={theme}
+    onChange={(e) => {
+      this.changeTheme(e.target.value);
+    }}
+  >
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+  </select>)
 
     return (
       <footer className="footer">
@@ -64,71 +77,10 @@ class TodoFooter extends React.Component {
           </li>
         </ul>
         {clearBtn}
+        {themeSelect}
       </footer>
     );
   }
 }
 
-class ReactTodoFooter extends HTMLElement {
-  set status(value) {
-    this._status = value;
-    this.render();
-  }
-  get status() {
-    return this._status;
-  }
-
-  set router(value) {
-    this._router = value;
-    this.render();
-  }
-
-  set count(value) {
-    this._count = value;
-    this.render();
-  }
-  get count() {
-    return this._count;
-  }
-
-  set hasCompleted(value) {
-    this._hasCompleted = value;
-    this.render();
-  }
-  get hasCompleted() {
-    return this._hasCompleted;
-  }
-
-  removeCompleted() {
-    var event = new CustomEvent('clear-completed');
-    this.dispatchEvent(event);
-  }
-
-  render() {
-    const { _count, _hasCompleted, removeCompleted } = this;
-
-    const propsReady = _count !== undefined && _hasCompleted !== undefined;
-
-    if (propsReady) {
-      ReactDOM.render(
-        <TodoFooter
-          count={_count}
-          hasCompleted={_hasCompleted}
-          removeCompleted={removeCompleted.bind(this)}
-        />,
-        this
-      );
-    }
-  }
-
-  connectedCallback() {
-    this.addEventListener('nav-link-click', (e) => {
-      console.log(e);
-      const { to } = e.detail;
-      this._router.navigate([to]);
-      e.stopPropagation();
-    });
-  }
-}
-
-export default ReactTodoFooter;
+export default TodoFooter;
