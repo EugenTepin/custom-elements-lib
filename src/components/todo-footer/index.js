@@ -4,7 +4,8 @@ import  TodoFooter  from "components/todo-footer/todo-footer";
 
 const mapStateToProps = (state) => {
     return {
-        theme: state.theme
+        theme: state.theme,
+        count: state.count
     }
   }
   

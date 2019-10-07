@@ -18,13 +18,13 @@ class ReactTodoFooter extends HTMLElement {
       this.render();
     }
   
-    set count(value) {
-      this._count = value;
-      this.render();
-    }
-    get count() {
-      return this._count;
-    }
+    // set count(value) {
+    //   this._count = value;
+    //   this.render();
+    // }
+    // get count() {
+    //   return this._count;
+    // }
   
     set hasCompleted(value) {
       this._hasCompleted = value;
@@ -40,15 +40,16 @@ class ReactTodoFooter extends HTMLElement {
     }
   
     render() {
-      const { _count, _hasCompleted, removeCompleted } = this;
-  
-      const propsReady = _count !== undefined && _hasCompleted !== undefined;
+      // const { _count, _hasCompleted, removeCompleted } = this;
+      // const propsReady = _count !== undefined && _hasCompleted !== undefined;
+      const { _hasCompleted, removeCompleted } = this;
+      const propsReady =  _hasCompleted !== undefined;
   
       if (propsReady) {
         ReactDOM.render(
           <Provider store={store}>
             <ComponentTodoFooter
-              count={_count}
+              //count={_count}
               hasCompleted={_hasCompleted}
               removeCompleted={removeCompleted.bind(this)}
             />
